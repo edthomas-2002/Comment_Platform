@@ -1,0 +1,161 @@
+body {
+  background-color: rgb(226, 226, 255); /* Soft purple color */
+}
+
+button {
+  border-radius: 20px; /* Adjust the value to control the roundness */
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Modern font stack */
+  margin-right: 5px; /* Adjust the margin to add space between buttons */
+  margin-left: 5px;
+}
+
+button.deleteButton {
+  background-color: #ffcccc; /* Light red background color */
+  border-color: #ff3333; /* Border color */
+  color: #cc0000; /* Text color */
+}
+
+button.editButton {
+  background-color: #ffffcc; /* Light yellow background color */
+  border-color: #cccc00; /* Border color */
+  color: #666600; /* Text color */
+}
+
+button.postButton {
+  background-color: #ccffcc; /* Light green background color */
+  border-color: #33cc33; /* Border color */
+  color: #006600; /* Text color */
+}
+
+.postBox {
+    width: 60%;
+    margin: 50px auto;
+    padding: 20px;
+    border-radius: 8px;
+    background-color: #ffffff; /* White background */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Box shadow for depth */
+  }
+  
+  .postBox h3 {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Choose a clean sans-serif font */
+    font-size: 24px;
+    margin-bottom: 10px;
+    color: #333333; /* Darker text color */
+  }
+  
+  .postBox p {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 16px;
+    color: #666666; /* Slightly lighter text color */
+    line-height: 1.5;
+  }
+  
+  .postBox small {
+    font-size: 12px;
+    color: #999999; /* Lighter text color for metadata */
+  }
+  
+  .postBox button {
+    margin-top: 10px;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 14px;
+  }
+  
+  .postBox .btnEdit {
+    background-color: #f5bb00; /* Yellow for edit button */
+    color: #ffffff; /* White text color */
+  }
+  
+  .postBox .btnDelete {
+    background-color: #ff6666; /* Light red for delete button */
+    color: #ffffff; /* White text color */
+  }
+  
+  .postBox .btnPost {
+    background-color: #66cc99; /* Light green for post button */
+    color: #ffffff; /* White text color */
+  }
+  
+  /* Adjust the hover and focus styles for buttons if needed */
+  .postBox button:hover,
+  .postBox button:focus {
+    opacity: 0.8; /* Slight opacity change on hover/focus */
+  }
+  
+.postContent {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+.footerContent {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-top: auto;
+    padding-top: 10px;
+  }
+
+.buttonContainer {
+  align-items: center;
+}
+
+.createPostForm {
+  width: 60%;
+  margin-top: 100px;
+  padding: 20px;
+  border-radius: 8px;
+  background-color: #ffffff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.createPostForm h3 {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 24px;
+  margin-bottom: 10px;
+  color: rgb(160, 160, 255);
+}
+
+.createPostForm textarea {
+  width: calc(100% - 40px);
+  height: 200px;
+  margin-bottom: 15px;
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #dddddd;
+  resize: vertical;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 16px;
+  color: #333333;
+}
+
+.createPostForm button {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 14px;
+}
+
+.createPostForm .btnPost {
+  background-color: #66cc99;
+  color: #ffffff;
+}
+
+.createPostForm button:hover,
+.createPostForm button:focus {
+  opacity: 0.8;
+}
+
+.formContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50vh; /* Adjust as needed to center vertically */
+    margin-bottom: 150px;
+  }
