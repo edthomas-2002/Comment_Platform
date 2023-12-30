@@ -7,4 +7,4 @@ class Post(models.Model):
     text = models.TextField()
     date = models.TextField()
     likes = models.IntegerField(default=0)
-    image = models.URLField(blank=True, max_length=10000000)
+    image = models.URLField(blank=True, max_length=500)
