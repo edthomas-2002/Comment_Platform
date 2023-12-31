@@ -2,16 +2,16 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom'; 
 import './styles.css';
 
-function LoginPage({ setIsLoggedIn, saveAuthor }) {
+function SignupPage({ setIsLoggedIn, saveAuthor }) {
   const [author, setAuthor] = useState('');
   const [password, setPassword] = useState('');
-  const [invalidCredentialsMessage, setInvalidCredentialsMessage] = useState('');
+  const [userExistsMessage, setUserExistsMessage] = useState('');
   const navigate = useNavigate();
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
 
-    fetch('http://localhost:8000/api/login/', {
+    fetch('http://localhost:8000/api/signup/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json' // Specify content type as JSON
@@ -25,30 +25,26 @@ function LoginPage({ setIsLoggedIn, saveAuthor }) {
         return response.json(); // Parse response JSON
       })
       .then(data => {
-        if (data['message'] === 'Login successful') {
-          console.log('Login successful:', data);
-          setIsLoggedIn(true);
-          saveAuthor(author);
-          navigate('/posts');
-      }
-      else if (data['message'] === 'Invalid credentials') {
-          console.log('Invalid credentials: ', data);
-          setInvalidCredentialsMessage('Invalid credentials. Try again.');
-      }
+        if (data['message'] === 'Signup successful') {
+            console.log('Profile created successfully:', data);
+            setIsLoggedIn(true);
+            saveAuthor(author);
+            navigate('../posts');
+        }
+        else if (data['message'] === 'User already exists') {
+            console.log('User already exists:', data);
+            setUserExistsMessage('User already exists. Try again.');
+        }
       })
       .catch(error => {
         console.error('There was a problem with the fetch operation:', error);
       });
   };
 
-  const handleSignup = () => {
-    navigate('/signup')
-  };
-
   return (
     <div className="formContainer">
-      <form className="loginForm" onSubmit={handleFormSubmit}>
-        <h3 className='login'>Login</h3>
+      <form className="signupForm" onSubmit={handleFormSubmit}>
+        <h3 className='signup'>Create a New Account</h3>
         <div>
           <input
             type="text"
@@ -61,14 +57,13 @@ function LoginPage({ setIsLoggedIn, saveAuthor }) {
             onChange={(e) => setPassword(e.target.value)}
           />
         </div>
-        <div style={{ color: 'red' }}>{invalidCredentialsMessage}</div>
+        <div style={{ color: 'red' }}>{userExistsMessage}</div>
         <div>
-          <button className="loginButton" type="submit">Login</button>
-          <button className="signupButton" onClick={handleSignup}>Sign Up</button>
+          <button className="signupButton" type="submit">Sign Up</button>
         </div>
       </form>
     </div>
   );
 }
 
-export default LoginPage;
+export default SignupPage;
