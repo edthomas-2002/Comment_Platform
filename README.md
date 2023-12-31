@@ -7,6 +7,7 @@ pip install django
 pip install djangorestframework
 pip install psycopg2-binary
 pip install django-cors-headers
+npm install react-router-dom ? idk if this is in comment_platform OR frontend
 https://www.postgresql.org/download/
 set password for “postgres” user to “postgres" — if already different then incomment_platform/settings.py, change the password field of the Database, also change port as needed
 psql -U postgres

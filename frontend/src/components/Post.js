@@ -2,32 +2,41 @@ import React, { useState } from 'react';
 import './styles.css';
 import EditPostForm from './EditPostForm';
 
-function Post({ post, onDelete }) {
+function Post({ activeAuthor, post, onEdit, onDelete }) {
   const [isEditing, setIsEditing] = useState(false);
   
   const handleEdit = () => {
-    setIsEditing(true);
+    if (activeAuthor === post.author) {
+      setIsEditing(true);
+    }
   };
+
+  const completeEdit = (updatedPostData) => {
+    setIsEditing(false);
+    onEdit(updatedPostData);
+  }
 
   const handleCancelEdit = () => {
     setIsEditing(false);
   };
 
   const handleDelete = () => {
-    fetch(`http://localhost:8000/api/posts/${post.id}/`, {
-      method: 'DELETE',
-    })
-      .then((response) => {
-        if (response.ok) {
-          console.log('Post deleted successfully');
-          onDelete(post.id); // Notify parent component of deleted post ID
-        } else {
-          console.error('Failed to delete post');
-        }
+    if (activeAuthor === post.author) {
+      fetch(`http://localhost:8000/api/posts/${post.id}/`, {
+        method: 'DELETE',
       })
-      .catch((error) => {
-        console.error('Error deleting post:', error);
-      });
+        .then((response) => {
+          if (response.ok) {
+            console.log('Post deleted successfully');
+            onDelete(post.id); // Notify parent component of deleted post ID
+          } else {
+            console.error('Failed to delete post');
+          }
+        })
+        .catch((error) => {
+          console.error('Error deleting post:', error);
+        });
+    }
   };
 
   const incrementLikes = () => {
@@ -36,8 +45,8 @@ function Post({ post, onDelete }) {
     likesCountElement.textContent = `Likes: ${post.likes}`;
   };
 
-  const handleLike = () => {
-    fetch(`http://localhost:8000/api/posts/${post.id}/`, {
+  const handleLike = async () => {
+    await fetch(`http://localhost:8000/api/posts/${post.id}/`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -57,13 +66,13 @@ function Post({ post, onDelete }) {
         console.error('Error liking post:', error);
       });
 
-      incrementLikes();
+    incrementLikes();
   };
   
   return (
     <div className="postBox">
       {isEditing ? (
-        <EditPostForm post={post} onCancelEdit={handleCancelEdit} />
+        <EditPostForm post={post} onCompleteEdit={completeEdit} onCancelEdit={handleCancelEdit} />
       ) : (
         <div className="postContent">
           <h3>{post.author}</h3>

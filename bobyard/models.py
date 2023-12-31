@@ -8,3 +8,7 @@ class Post(models.Model):
     date = models.TextField()
     likes = models.IntegerField(default=0)
     image = models.URLField(blank=True, max_length=500)
+
+class Profile(models.Model):
+    author = models.TextField(unique=True)
+    password = models.TextField()

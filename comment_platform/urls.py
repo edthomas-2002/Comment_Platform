@@ -16,12 +16,16 @@ Including another URLconf
 """
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from bobyard.views import PostViewset
+from django.views.generic.base import RedirectView
+from django.views.generic import TemplateView
+from bobyard.views import *
 
 router = DefaultRouter()
 router.register(r'posts', PostViewset)
+router.register(r'profiles', ProfileViewset)
 
 urlpatterns = [
     path('api/', include(router.urls)),
-    # Other URL patterns...
+    path('api/login/', user_login),
+    path('api/signup/', user_signup),
 ]

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-function EditPostForm({ post, onCancelEdit }) {
+function EditPostForm({ post, onCompleteEdit, onCancelEdit }) {
   const [editedContent, setEditedContent] = useState(post.text);
 
   const handleFormSubmit = (e) => {
@@ -10,20 +10,17 @@ function EditPostForm({ post, onCancelEdit }) {
     formData.append('author', post.author);
     formData.append('text', editedContent);
     formData.append('image', post.image);
-    formData.append('date', post.currentTime);
+    formData.append('date', post.date);
     formData.append('likes', post.likes);
     
     fetch(`http://localhost:8000/api/posts/${post.id}/`, {
       method: 'PUT',
       body: formData,
     })
-      .then((response) => {
-        if (response.ok) {
-          console.log('Post updated successfully');
-          window.location.reload();
-        } else {
-          throw new Error('Failed to update post');
-        }
+      .then((response) => response.json())
+      .then((data) => {
+        console.log('Post updated successfully');
+        onCompleteEdit(data);
       })
       .catch((error) => {
         console.error('Error updating post:', error);

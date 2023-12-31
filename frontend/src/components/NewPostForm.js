@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import './styles.css';
 
-function NewPostForm() {
-  const [author, setAuthor] = useState('');
+function NewPostForm({ author, onNewPost }) {
   const [text, setText] = useState('');
 
   const handleFormSubmit = (e) => {
@@ -24,7 +23,8 @@ function NewPostForm() {
       .then((response) => response.json())
       .then((data) => {
         console.log('New post created:', data);
-        window.location.reload();
+        setText(''); // Clear the textarea after successful post creation
+        onNewPost(data); // Notify the parent component about the new post
       })
       .catch((error) => {
         console.error('Error creating post:', error);
@@ -37,12 +37,7 @@ function NewPostForm() {
       <form className="createPostForm" onSubmit={handleFormSubmit}>
         <h3 className='createNewPost'>Create a new post</h3>
         <div>
-          <label>Author:</label>
-          <input
-            type="text"
-            value={author}
-            onChange={(e) => setAuthor(e.target.value)}
-          />
+          <label>Author: {author}</label>
         </div>
         <div>
           <label>Content:</label>

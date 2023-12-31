@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import Post from './Post';
+import NewPostForm from './NewPostForm';
 
-function Posts() {
+function PostsPage({ author }) {
   const [posts, setPosts] = useState([]);
 
   useEffect(() => {
@@ -22,13 +23,26 @@ function Posts() {
     setPosts(posts.filter((post) => post.id !== postId));
   };
 
+  const handleNewPost = (newPostData) => {
+    // Add the new post to the current posts
+    setPosts([newPostData, ...posts]);
+  };
+
+  const handleEdit = (updatedPostData) => {
+    const updatedPosts = posts.map((post) =>
+    post.id === updatedPostData.id ? updatedPostData : post
+    );
+    setPosts(updatedPosts);
+  };
+
   return (
-    <div className="posts">
+    <div className="postsPage">
+      <NewPostForm author={author} onNewPost={handleNewPost} />
       {posts.map((post) => (
-        <Post key={post.id} post={post} onDelete={handleDelete} />
+        <Post key={post.id} activeAuthor={author} post={post} onEdit={handleEdit} onDelete={handleDelete} />
       ))}
     </div>
   );
 }
 
-export default Posts;
+export default PostsPage;
