@@ -21,6 +21,12 @@ button.editButton {
   color: #666600; /* Text color */
 }
 
+button.likeButton {
+  background-color: rgb(226, 226, 255); /* Light yellow background color */
+  border-color: #b1b6ff; /* Border color */
+  color: #6645dc; /* Text color */
+}
+
 button.postButton {
   background-color: #ccffcc; /* Light green background color */
   border-color: #33cc33; /* Border color */
@@ -64,22 +70,7 @@ button.postButton {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     font-size: 14px;
   }
-  
-  .postBox .btnEdit {
-    background-color: #f5bb00; /* Yellow for edit button */
-    color: #ffffff; /* White text color */
-  }
-  
-  .postBox .btnDelete {
-    background-color: #ff6666; /* Light red for delete button */
-    color: #ffffff; /* White text color */
-  }
-  
-  .postBox .btnPost {
-    background-color: #66cc99; /* Light green for post button */
-    color: #ffffff; /* White text color */
-  }
-  
+
   /* Adjust the hover and focus styles for buttons if needed */
   .postBox button:hover,
   .postBox button:focus {
@@ -101,7 +92,9 @@ button.postButton {
   }
 
 .buttonContainer {
-  align-items: center;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
 }
 
 .createPostForm {
@@ -118,6 +111,13 @@ button.postButton {
   font-size: 24px;
   margin-bottom: 10px;
   color: rgb(160, 160, 255);
+}
+
+.createPostForm label {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 18px;
+  margin-bottom: 10px;
+  color: rgb(41, 41, 161);
 }
 
 .createPostForm textarea {

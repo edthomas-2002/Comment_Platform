@@ -30,6 +30,36 @@ function Post({ post, onDelete }) {
       });
   };
 
+  const incrementLikes = () => {
+    post.likes++;
+    const likesCountElement = document.getElementById('likesCount');
+    likesCountElement.textContent = `Likes: ${post.likes}`;
+  };
+
+  const handleLike = () => {
+    fetch(`http://localhost:8000/api/posts/${post.id}/`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(
+        {'author': post.author, 'text': post.text, 'date': post.date, 
+          'likes': post.likes+1, 'image': post.image})
+    })
+      .then((response) => {
+        if (response.ok) {
+          console.log('Post liked successfully');
+        } else {
+          console.error('Failed to like post');
+        }
+      })
+      .catch((error) => {
+        console.error('Error liking post:', error);
+      });
+
+      incrementLikes();
+  };
+  
   return (
     <div className="postBox">
       {isEditing ? (
@@ -40,12 +70,17 @@ function Post({ post, onDelete }) {
           <p>{post.text}</p>
           <div>
             <div className="buttonContainer">
-              <button className="editButton" onClick={handleEdit}>Edit</button>
-              <button className="deleteButton" onClick={handleDelete}>Delete</button>
+              <div className="leftButtons">
+                <button className="editButton" onClick={handleEdit}>Edit</button>
+                <button className="deleteButton" onClick={handleDelete}>Delete</button>
+              </div>
+              <div className="rightButtons">
+                <button className="likeButton" onClick={handleLike}>Like</button>
+              </div>
             </div>
             <div className="footerContent">
               <small>Posted: {post.date}</small>
-              <small>Likes: {post.likes}</small>
+              <small id='likesCount'>Likes: {post.likes}</small>
             </div>
             {post.image && <img src={post.image} alt="Post" 
             style={{

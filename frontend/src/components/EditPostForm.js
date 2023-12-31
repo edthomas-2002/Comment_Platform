@@ -9,11 +9,9 @@ function EditPostForm({ post, onCancelEdit }) {
     const formData = new FormData();
     formData.append('author', post.author);
     formData.append('text', editedContent);
-    if (post.image) {
-      formData.append('image', post.image);
-    }
+    formData.append('image', post.image);
     formData.append('date', post.currentTime);
-    formData.append('likes', 0);
+    formData.append('likes', post.likes);
     
     fetch(`http://localhost:8000/api/posts/${post.id}/`, {
       method: 'PUT',
