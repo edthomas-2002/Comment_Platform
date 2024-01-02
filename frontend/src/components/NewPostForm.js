@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './styles.css';
 
-function NewPostForm({ author, onNewPost }) {
+function NewPostForm({ type, parentId, author, onNewPost, onCancel }) {
   const [text, setText] = useState('');
 
   const handleFormSubmit = (e) => {
@@ -11,6 +11,7 @@ function NewPostForm({ author, onNewPost }) {
 
     const formData = new FormData();
     formData.append('author', author);
+    formData.append('parent', parentId);
     formData.append('text', text);
     formData.append('date', currentTime);
     formData.append('likes', 0);
@@ -35,7 +36,11 @@ function NewPostForm({ author, onNewPost }) {
   return (
     <div className="formContainer">
       <form className="createPostForm" onSubmit={handleFormSubmit}>
-        <h3 className='createNewPost'>Create a new post</h3>
+        {type === 'post' ? (
+          <h3 className='createNewPost'>Make a Post!</h3>
+        ) : (
+          <h3 className='createNewPost'>Reply</h3>
+        )}
         <div>
           <label>Author: {author}</label>
         </div>
@@ -46,7 +51,12 @@ function NewPostForm({ author, onNewPost }) {
             onChange={(e) => setText(e.target.value)}
           ></textarea>
         </div>
-        <button className="postButton" type="submit">Add Post</button>
+        <button className="postButton" type="submit">Add {type}</button>
+        {type === 'reply' ? (
+          <button className="cancelPostButton" onClick={onCancel}>Cancel</button>
+        ) : (
+          <div />
+        )}
       </form>
     </div>
   );

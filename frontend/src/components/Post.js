@@ -1,10 +1,32 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './styles.css';
 import EditPostForm from './EditPostForm';
+import NewPostForm from './NewPostForm';
 
-function Post({ activeAuthor, post, onEdit, onDelete }) {
+function Post({ thisPost, children, postToChildren, activeAuthor, onDelete }) {
   const [isEditing, setIsEditing] = useState(false);
-  
+  const [isReplying, setIsReplying] = useState(false);
+  const [post, setPost] = useState(thisPost);
+  const [childPosts, setChildPosts] = useState(children);
+  // const [postToChildrenMap, setPostToChildrenMap] = useState(postToChildren);
+  const [activeAuthorLiked, setActiveAuthorLiked] = useState(false);
+
+  useEffect(() => {
+    // check if liked by activeAuthor when component mounts
+    fetch(`http://localhost:8000/api/posts/${post.id}/check-like/?active_author=${activeAuthor}`, {
+      method: 'GET',
+    },)
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.message === 'Liked') {
+          setActiveAuthorLiked(true);
+        }
+      })
+      .catch((error) => {
+        console.error('Error checking for liked:', error);
+      });
+  }, []);
+
   const handleEdit = () => {
     if (activeAuthor === post.author) {
       setIsEditing(true);
@@ -13,7 +35,7 @@ function Post({ activeAuthor, post, onEdit, onDelete }) {
 
   const completeEdit = (updatedPostData) => {
     setIsEditing(false);
-    onEdit(updatedPostData);
+    setPost(updatedPostData);
   }
 
   const handleCancelEdit = () => {
@@ -28,6 +50,7 @@ function Post({ activeAuthor, post, onEdit, onDelete }) {
         .then((response) => {
           if (response.ok) {
             console.log('Post deleted successfully');
+            // need to remove from postToChildren
             onDelete(post.id); // Notify parent component of deleted post ID
           } else {
             console.error('Failed to delete post');
@@ -39,36 +62,53 @@ function Post({ activeAuthor, post, onEdit, onDelete }) {
     }
   };
 
-  const incrementLikes = () => {
-    post.likes++;
-    const likesCountElement = document.getElementById('likesCount');
-    likesCountElement.textContent = `Likes: ${post.likes}`;
+  const handleChildDelete = (postId) => {
+    setChildPosts(childPosts.filter((post) => post.id !== postId));
+    postToChildren[post.id] = childPosts;
+    onDelete(postId);
   };
 
-  const handleLike = async () => {
-    await fetch(`http://localhost:8000/api/posts/${post.id}/`, {
+  const handleLike = () => {
+      fetch(`http://localhost:8000/api/posts/${post.id}/like/`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
+        // 'Request-Type': 'like',  --> Could simply check for 'Request-Type' in the 
+        // PostViewset update functions instead, don't add the like/ to the end of URL
       },
       body: JSON.stringify(
-        {'author': post.author, 'text': post.text, 'date': post.date, 
-          'likes': post.likes+1, 'image': post.image})
+        {'liker': activeAuthor})
     })
-      .then((response) => {
-        if (response.ok) {
-          console.log('Post liked successfully');
-        } else {
-          console.error('Failed to like post');
+      .then((response) => response.json())
+      .then((data) => {
+        console.log('Post liked successfully:', data);
+        setPost(data);
+        if (data.message === 'Liked') {
+          setActiveAuthorLiked(true);
+        }
+        else { // Not liked (unliked)
+          setActiveAuthorLiked(false);
         }
       })
       .catch((error) => {
         console.error('Error liking post:', error);
-      });
-
-    incrementLikes();
+      });  
   };
   
+  const handleReply = () => {
+    setIsReplying(true);
+  };
+
+  const completeReply = (reply) => {
+    setIsReplying(false);
+    setChildPosts(childPosts ? [reply, ...childPosts] : [reply]);
+    postToChildren[post.id] = childPosts;
+  }
+
+  const handleCancelReply = () => {
+    setIsReplying(false);
+  };
+
   return (
     <div className="postBox">
       {isEditing ? (
@@ -79,17 +119,28 @@ function Post({ activeAuthor, post, onEdit, onDelete }) {
           <p>{post.text}</p>
           <div>
             <div className="buttonContainer">
-              <div className="leftButtons">
-                <button className="editButton" onClick={handleEdit}>Edit</button>
-                <button className="deleteButton" onClick={handleDelete}>Delete</button>
-              </div>
+              {activeAuthor === post.author? (
+                <div className="leftButtons">
+                  <button className="editButton" onClick={handleEdit}>Edit</button>
+                  <button className="deleteButton" onClick={handleDelete}>Delete</button>
+                  <button className="replyButton" onClick={handleReply}>Reply</button>
+                </div>
+              ) : (
+                <div>
+                  <button className="replyButton" onClick={handleReply}>Reply</button>
+                </div>
+              )}
               <div className="rightButtons">
-                <button className="likeButton" onClick={handleLike}>Like</button>
+                {activeAuthorLiked ? (
+                  <button className="likeButtonLiked" onClick={handleLike}>Liked</button>
+                ) : (
+                  <button className="likeButtonDefault" onClick={handleLike}>Like</button>
+                )}
               </div>
             </div>
             <div className="footerContent">
               <small>Posted: {post.date}</small>
-              <small id='likesCount'>Likes: {post.likes}</small>
+              <small id={`likesCount${post.id}`}>Likes: {post.likes}</small>
             </div>
             {post.image && <img src={post.image} alt="Post" 
             style={{
@@ -99,6 +150,16 @@ function Post({ activeAuthor, post, onEdit, onDelete }) {
           </div>
         </div>
       )}
+      {isReplying ? (
+        <NewPostForm type='reply' parentId={post.id} author={activeAuthor} onNewPost={completeReply} onCancel={handleCancelReply} />
+      ) : (
+        <div />
+      )}
+      <div className='childPosts'>
+      {childPosts?.map((post) => (
+        <Post key={post.id} thisPost={post} children={postToChildren[post.id]} postToChildren={postToChildren} activeAuthor={activeAuthor} onDelete={handleChildDelete} />
+      ))}
+      </div>
     </div>
   );
 }

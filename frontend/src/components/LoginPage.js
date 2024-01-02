@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom'; 
-import './styles.css';
+import './styles.css'; 
 
-function LoginPage({ setIsLoggedIn, saveAuthor }) {
+function LoginPage() {
   const [author, setAuthor] = useState('');
   const [password, setPassword] = useState('');
   const [invalidCredentialsMessage, setInvalidCredentialsMessage] = useState('');
@@ -27,8 +27,8 @@ function LoginPage({ setIsLoggedIn, saveAuthor }) {
       .then(data => {
         if (data['message'] === 'Login successful') {
           console.log('Login successful:', data);
-          setIsLoggedIn(true);
-          saveAuthor(author);
+          sessionStorage.setItem('author', author);
+          sessionStorage.setItem('loggedIn', true);
           navigate('/posts');
       }
       else if (data['message'] === 'Invalid credentials') {

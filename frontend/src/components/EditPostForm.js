@@ -10,7 +10,7 @@ function EditPostForm({ post, onCompleteEdit, onCancelEdit }) {
     formData.append('author', post.author);
     formData.append('text', editedContent);
     formData.append('image', post.image);
-    formData.append('date', post.date);
+    formData.append('date', post.currentTime);
     formData.append('likes', post.likes);
     
     fetch(`http://localhost:8000/api/posts/${post.id}/`, {

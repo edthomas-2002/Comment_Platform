@@ -29,10 +29,16 @@ button.editButton {
   color: #666600; /* Text color */
 }
 
-button.likeButton {
+button.likeButtonDefault {
   background-color: rgb(226, 226, 255); /* Light yellow background color */
   border-color: #b1b6ff; /* Border color */
   color: #6645dc; /* Text color */
+}
+
+button.likeButtonLiked {
+  background-color: #8d76e0; /* Light yellow background color */
+  border-color: #b1b6ff; /* Border color */
+  color: #491cea; /* Text color */
 }
 
 button.postButton {
@@ -41,8 +47,14 @@ button.postButton {
   color: #006600; /* Text color */
 }
 
+button.signOutButton {
+  margin-top: 20px;
+  position: absolute;
+  right: 2.5%;
+}
+
 .postBox {
-    width: 60%;
+    width: 80%;
     margin: 50px auto;
     padding: 20px;
     border-radius: 8px;
@@ -106,9 +118,9 @@ button.postButton {
 }
 
 .createPostForm {
-  width: 60%;
-  margin-top: 100px;
+  width: 75%;
   padding: 20px;
+  padding-top: 0px;
   border-radius: 8px;
   background-color: #ffffff;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -165,7 +177,8 @@ button.postButton {
     justify-content: center;
     align-items: center;
     height: 50vh; /* Adjust as needed to center vertically */
-    margin-bottom: 150px;
+    margin-top: 5%;
+    margin-bottom: 75px;
   }
 
 .loginForm {

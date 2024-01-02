@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom'; 
 import './styles.css';
 
-function SignupPage({ setIsLoggedIn, saveAuthor }) {
+function SignupPage() {
   const [author, setAuthor] = useState('');
   const [password, setPassword] = useState('');
   const [userExistsMessage, setUserExistsMessage] = useState('');
@@ -27,8 +27,8 @@ function SignupPage({ setIsLoggedIn, saveAuthor }) {
       .then(data => {
         if (data['message'] === 'Signup successful') {
             console.log('Profile created successfully:', data);
-            setIsLoggedIn(true);
-            saveAuthor(author);
+            sessionStorage.setItem('author', author);
+            sessionStorage.setItem('loggedIn', true);
             navigate('../posts');
         }
         else if (data['message'] === 'User already exists') {

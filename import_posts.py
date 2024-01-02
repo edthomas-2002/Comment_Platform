@@ -12,7 +12,8 @@ django.setup()
 from bobyard.models import Post  # Import your Post model
 
 def import_posts():
-    json_file_path = Path('./comments.json')  # Adjust the path to your JSON file
+    Post.objects.all().delete()
+    json_file_path = Path('./comments2.json')  # Adjust the path to your JSON file
     with open(json_file_path, 'r') as file:
         data = json.load(file)
 
@@ -23,9 +24,10 @@ def import_posts():
         date = item['date']
         likes = item['likes']
         image = item['image']
+        parent = item['parent']
         # Create and save a Post object
         # new_post = Post.objects.create(id=id, author=author, text=text, date=date, likes=likes, image=image)
-        post = Post(id=id, author=author, text=text, date=date, likes=likes, image=image)
+        post = Post(id=id, author=author, text=text, date=date, likes=likes, image=image, parent=parent)
         post.save()
 
 if __name__ == "__main__":
