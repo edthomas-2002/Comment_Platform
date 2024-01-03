@@ -47,6 +47,14 @@ class PostViewset(viewsets.ModelViewSet):
         if not post.likers.filter(author=active_author):
             return Response({'message': 'Not liked'})
         return Response({'message': 'Liked'})
+    
+    @action(detail=False, methods=['GET'], url_path='query')
+    def perform_query(self, request, pk=None):
+        query = request.GET.get('query_content')
+        posts = self.get_queryset()
+        filtered_posts = posts.filter(text__contains=query).values()
+        serializer = self.get_serializer(filtered_posts, many=True)
+        return Response(serializer.data)
 
 class ProfileViewset(viewsets.ModelViewSet):
     queryset = Profile.objects.all()

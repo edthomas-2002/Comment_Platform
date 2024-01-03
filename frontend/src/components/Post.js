@@ -8,7 +8,6 @@ function Post({ thisPost, children, postToChildren, activeAuthor, onDelete }) {
   const [isReplying, setIsReplying] = useState(false);
   const [post, setPost] = useState(thisPost);
   const [childPosts, setChildPosts] = useState(children);
-  // const [postToChildrenMap, setPostToChildrenMap] = useState(postToChildren);
   const [activeAuthorLiked, setActiveAuthorLiked] = useState(false);
 
   useEffect(() => {

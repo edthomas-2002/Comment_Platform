@@ -39,7 +39,7 @@ function NewPostForm({ type, parentId, author, onNewPost, onCancel }) {
         {type === 'post' ? (
           <h3 className='createNewPost'>Make a Post!</h3>
         ) : (
-          <h3 className='createNewPost'>Reply</h3>
+          <h3 className='createNewPost'>Reply!</h3>
         )}
         <div>
           <label>Author: {author}</label>

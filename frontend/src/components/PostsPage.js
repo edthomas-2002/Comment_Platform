@@ -2,9 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Post from './Post';
 import NewPostForm from './NewPostForm';
+// import Dashboard from './Dashboard';
+import SearchBar from './SearchBar';
 
 function PostsPage() {
   const [posts, setPosts] = useState([]);
+  const [isQuerying, setIsQuerying] = useState(false);
+  const [queryRenderPosts, setQueryRenderPosts] = useState([]);
   const [postToChildren, setPostToChildren] = useState({});
   const author = sessionStorage.getItem('author');
   const navigate = useNavigate();
@@ -46,12 +50,39 @@ function PostsPage() {
     setPostToChildren(obj);
   };
 
+  const getParentPost = (post) => {
+    const parentId = parseInt(post.parent);
+    const parent = posts.filter((p) => p.id === parentId)[0];
+    return parent;
+  };
+
+  const handleQuery = (posts_arr) => {
+    setQueryRenderPosts(posts_arr);
+  };
+
   return (
     <div className="postsPage">
+      <SearchBar setIsQuerying={setIsQuerying} onQuery={handleQuery} />
       <button className="signOutButton" onClick={handleSignOut}>Sign Out</button>
-      <NewPostForm type='post' parentId={''} author={author} onNewPost={handleNewPost} />
-      {posts.filter((post) => post.parent === '').map((post) => 
-        <Post key={post.id} thisPost={post} children={postToChildren[post.id]} postToChildren={postToChildren} activeAuthor={author} onDelete={handleDelete} />
+      {isQuerying ? (
+        <div>
+          {queryRenderPosts.map((post) => 
+          <div>
+            {post.parent ? (
+              <Post key={parseInt(post.parent)} thisPost={getParentPost(post)} children={[post]} postToChildren={postToChildren} activeAuthor={author} />
+            ) : (
+              <Post key={post.id} thisPost={post} children={postToChildren[post.id]} postToChildren={postToChildren} activeAuthor={author} />
+            )}
+          </div>
+        )}
+        </div>
+      ): (
+        <div>
+        <NewPostForm type='post' parentId={''} author={author} onNewPost={handleNewPost} />
+        {posts.filter((post) => post.parent === '').map((post) => 
+          <Post key={post.id} thisPost={post} children={postToChildren[post.id]} postToChildren={postToChildren} activeAuthor={author} onDelete={handleDelete} />
+        )}
+        </div>
       )}
     </div>
   );
